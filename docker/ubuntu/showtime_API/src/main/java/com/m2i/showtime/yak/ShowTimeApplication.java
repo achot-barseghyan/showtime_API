@@ -1,7 +1,5 @@
 package com.m2i.showtime.yak;
 
-import com.m2i.showtime.yak.category.Category;
-import com.m2i.showtime.yak.category.CategoryRepository;
 import com.m2i.showtime.yak.movie.Movie;
 import com.m2i.showtime.yak.movie.MovieRepository;
 import com.m2i.showtime.yak.user.User;
@@ -26,8 +24,7 @@ public class ShowTimeApplication {
 	}
 		@Bean
 		public CommandLineRunner mappingDemo(UserRepository userRepo,
-											 MovieRepository movieRepo,
-											 CategoryRepository categoryRepo) {
+				MovieRepository movieRepo) {
 			return args -> {
 
 				User user = new User(
@@ -40,26 +37,19 @@ public class ShowTimeApplication {
 
 				userRepo.save(user);
 
-				Category category1 = new Category("Action");
-				Category category2 = new Category("Adventure");
-				Category category3 = new Category("Science Fiction");
+				// create three courses
+				Movie course1 = new Movie("Matrix");
+				Movie course2 = new Movie("Avatar");
+				Movie course3 = new Movie("Inception");
 
-				categoryRepo.saveAll(Arrays.asList(category1,category2,category3));
+				// save courses
+				movieRepo.saveAll(Arrays.asList(course1, course2, course3));
 
-				Movie movie1 = new Movie(1L,"Matrix");
-				Movie movie2 = new Movie(2L,"Avatar");
-				Movie movie3 = new Movie(3L,"Inception");
+				// add courses to the student
+				user.getWatchedMovies().addAll(Arrays.asList(course1, course2, course3));
 
-				movie1.getCategories().add(category1);
-				movie2.getCategories().addAll(Arrays.asList(category1,category2));
-				movie3.getCategories().add(category3);
-
-				movieRepo.saveAll(Arrays.asList(movie1, movie2, movie3));
-
-				user.getWatchedMovies().addAll(Arrays.asList(movie1, movie2, movie3));
-
+				// update the student
 				userRepo.save(user);
-
 			};
 		}
 
